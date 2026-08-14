@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Unonote</title>
     <link rel="manifest" href="/manifest.webmanifest">
-    <meta name="theme-color" content="#ffffff">
+    <meta name="theme-color" content="#f2f2f7">
     <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
@@ -17,17 +17,38 @@
     </header>
 
     <main>
-        <textarea id="note-input" placeholder="Collect my parcel from the post office after lunch" aria-label="Votre note"></textarea>
+        <div class="note-card">
+            <textarea id="note-input" placeholder="Collect my parcel from the post office after lunch" aria-label="Votre note"></textarea>
+        </div>
     </main>
 
     <footer>
-        <button id="live-btn" aria-label="Go Live">GO LIVE</button>
-        
-        <div class="settings-bar">
-            <button id="settings-toggle" aria-label="Paramètres">⚙️</button>
+        <div class="controls-container">
+            <!-- Bouton Paramètres (Gauche) -->
+            <button id="settings-btn" class="icon-btn" aria-label="Paramètres">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                </svg>
+            </button>
+
+            <!-- Bouton Go Live (Centre) -->
+            <button id="live-btn" aria-label="Go Live">
+                <span id="live-icon" class="record-circle"></span>
+                <span id="live-text">Go Live</span>
+            </button>
+
+            <!-- Bouton Corbeille (Droite) -->
+            <button id="trash-btn" class="icon-btn" aria-label="Supprimer la note">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                </svg>
+            </button>
         </div>
     </footer>
 
+    <!-- Modal Paramètres discret -->
     <div id="settings-modal" class="hidden">
         <div class="settings-content">
             <h3>Settings</h3>
@@ -38,6 +59,7 @@
         </div>
     </div>
 
+    <!-- Scripts -->
     <script src="/db.js"></script>
     <script src="/app.js"></script>
 </body>
