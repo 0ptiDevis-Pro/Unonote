@@ -9,11 +9,11 @@ const liveBtn = document.getElementById('live-btn');
 const liveText = document.getElementById('live-text');
 const liveIndicator = document.getElementById('live-indicator');
 
-// Nouveaux boutons latéraux
+// Boutons latéraux
 const settingsBtn = document.getElementById('settings-btn');
 const trashBtn = document.getElementById('trash-btn');
 
-// Éléments de la modale
+// Modale
 const settingsModal = document.getElementById('settings-modal');
 const closeSettingsBtn = document.getElementById('close-settings-btn');
 const clearDataBtn = document.getElementById('clear-data-btn');
@@ -127,14 +127,11 @@ async function stopLive() {
     liveBtn.disabled = false;
 }
 
-// --- NOUVEAU : GESTION DE LA CORBEILLE ---
+// --- GESTION DE LA CORBEILLE ---
 trashBtn.addEventListener('click', async () => {
-    // Si le live est actif, on l'arrête
     if (appState.active) {
         await stopLive();
     }
-    
-    // On vide le texte
     appState.text = '';
     noteInput.value = '';
     await idbSet('appState', appState);
@@ -174,7 +171,7 @@ function updateSettingsUI() {
     document.getElementById('notif-status').textContent = `Notifications: ${Notification.permission}`;
 }
 
-// Rafraîchissements
+// Écouteurs d'événements
 navigator.serviceWorker.addEventListener('message', (event) => {
     if (event.data && event.data.type === 'LIVE_STOPPED') {
         appState.active = false;
