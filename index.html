@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Unonote</title>
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Unonote</h1>
+        <div id="live-indicator" class="hidden">
+            <span class="dot"></span> Live
+        </div>
+    </header>
+
+    <main>
+        <textarea id="note-input" placeholder="Collect my parcel from the post office after lunch" aria-label="Votre note"></textarea>
+    </main>
+
+    <footer>
+        <button id="live-btn" aria-label="Go Live">GO LIVE</button>
+        
+        <div class="settings-bar">
+            <button id="settings-toggle" aria-label="Paramètres">⚙️</button>
+        </div>
+    </footer>
+
+    <div id="settings-modal" class="hidden">
+        <div class="settings-content">
+            <h3>Settings</h3>
+            <p id="sw-status">Service Worker: Checking...</p>
+            <p id="notif-status">Notifications: Checking...</p>
+            <button id="clear-data-btn">Reset App Data</button>
+            <button id="close-settings-btn">Close</button>
+        </div>
+    </div>
+
+    <script src="/db.js"></script>
+    <script src="/app.js"></script>
+</body>
+</html>
