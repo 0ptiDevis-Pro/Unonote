@@ -1,6 +1,6 @@
 :root {
-    --bg-app: #f2f2f7; /* Gris très clair pour contraster avec la carte */
-    --bg-card: #ffffff; /* Blanc pur pour la zone de texte */
+    --bg-app: #f2f2f7; /* Fond gris très clair pour faire ressortir les cartes */
+    --bg-card: #ffffff; /* Fond blanc pur des cartes */
     --text-color: #000000;
     --gray-light: #e5e5ea;
     --gray-text: #8a8a8e;
@@ -28,29 +28,41 @@ body {
 }
 
 header {
+    padding: 20px 24px 12px 24px;
+    display: flex;
+    justify-content: center;
+}
+
+/* Carte haute d'en-tête pour mettre en valeur Unonote */
+.header-card {
     position: relative;
+    background-color: var(--bg-card);
+    width: 100%;
+    border-radius: var(--radius-large);
+    padding: 18px 24px;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 24px 32px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04), 0 1px 4px rgba(0, 0, 0, 0.02);
 }
 
-/* Titre centré, épais, avec relief */
+/* Titre ultra imposant, très gras, fortement mis en valeur */
 h1 {
-    font-size: 1.4rem;
-    font-weight: 700;
-    letter-spacing: -0.5px;
-    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    text-shadow: 0px 2px 6px rgba(0, 0, 0, 0.12);
+    text-align: center;
 }
 
 #live-indicator {
     position: absolute;
-    right: 32px;
+    right: 20px;
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 0.9rem;
-    font-weight: 500;
+    font-size: 0.85rem;
+    font-weight: 600;
     color: var(--gray-text);
     transition: opacity 0.3s ease;
 }
@@ -66,12 +78,12 @@ h1 {
     display: none !important;
 }
 
-/* Encadrement de la zone de texte en mode "Carte" */
+/* Encadrement de la zone de texte */
 main {
     flex: 1;
     display: flex;
-    padding: 0 24px;
-    margin-bottom: 16px;
+    padding: 8px 24px;
+    margin-bottom: 12px;
 }
 
 .note-card {
@@ -92,7 +104,7 @@ textarea {
     font-family: var(--font-stack);
     font-size: 1.8rem;
     font-weight: 400;
-    line-height: 1.2;
+    line-height: 1.25;
     background: transparent;
     color: var(--text-color);
 }
@@ -103,7 +115,7 @@ textarea::placeholder {
 }
 
 footer {
-    padding: 16px 24px 32px 24px;
+    padding: 12px 24px 32px 24px;
 }
 
 .controls-container {
@@ -125,7 +137,7 @@ button:active {
     transform: scale(0.95);
 }
 
-/* Boutons latéraux (Engrenage et Corbeille) */
+/* Boutons latéraux */
 .icon-btn {
     width: 52px;
     height: 52px;
@@ -139,7 +151,7 @@ button:active {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
-/* Bouton principal affiné avec icône d'enregistrement */
+/* Bouton principal */
 #live-btn {
     flex: 1;
     display: flex;
@@ -149,15 +161,14 @@ button:active {
     background-color: var(--text-color);
     color: var(--bg-card);
     border: none;
-    border-radius: 99px; /* Bouton forme pilule */
-    padding: 16px 24px; /* Épaisseur réduite */
+    border-radius: 99px;
+    padding: 16px 24px;
     font-size: 1.1rem;
     font-weight: 600;
     letter-spacing: -0.3px;
     box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
 }
 
-/* Cercle d'enregistrement vide */
 .record-circle {
     width: 14px;
     height: 14px;
@@ -166,7 +177,6 @@ button:active {
     display: inline-block;
 }
 
-/* État Actif : Carré d'arrêt */
 #live-btn.stop-mode {
     background-color: var(--gray-light);
     color: var(--text-color);
@@ -176,7 +186,7 @@ button:active {
 #live-btn.stop-mode .record-circle {
     border: none;
     background-color: var(--text-color);
-    border-radius: 2px; /* Devient un carré */
+    border-radius: 2px;
     width: 12px;
     height: 12px;
 }
