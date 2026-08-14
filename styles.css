@@ -1,9 +1,10 @@
 :root {
-    --bg-color: #ffffff;
+    --bg-app: #f2f2f7; /* Gris très clair pour contraster avec la carte */
+    --bg-card: #ffffff; /* Blanc pur pour la zone de texte */
     --text-color: #000000;
-    --gray-light: #f5f5f7;
-    --gray-text: #86868b;
-    --radius-large: 32px;
+    --gray-light: #e5e5ea;
+    --gray-text: #8a8a8e;
+    --radius-large: 28px;
     --radius-medium: 16px;
     --font-stack: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
@@ -17,29 +18,34 @@
 
 body {
     font-family: var(--font-stack);
-    background-color: var(--bg-color);
+    background-color: var(--bg-app);
     color: var(--text-color);
     display: flex;
     flex-direction: column;
     height: 100vh;
-    height: 100dvh; /* Adaptation aux navigateurs mobiles modernes */
+    height: 100dvh;
     overflow: hidden;
 }
 
 header {
+    position: relative;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: 24px 32px;
 }
 
+/* Titre centré, épais, avec relief */
 h1 {
-    font-size: 1.2rem;
-    font-weight: 600;
+    font-size: 1.4rem;
+    font-weight: 700;
     letter-spacing: -0.5px;
+    text-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 #live-indicator {
+    position: absolute;
+    right: 32px;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -60,10 +66,21 @@ h1 {
     display: none !important;
 }
 
+/* Encadrement de la zone de texte en mode "Carte" */
 main {
     flex: 1;
     display: flex;
-    padding: 0 32px;
+    padding: 0 24px;
+    margin-bottom: 16px;
+}
+
+.note-card {
+    background-color: var(--bg-card);
+    width: 100%;
+    border-radius: var(--radius-large);
+    padding: 24px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04), 0 1px 4px rgba(0, 0, 0, 0.02);
+    display: flex;
 }
 
 textarea {
@@ -73,7 +90,7 @@ textarea {
     resize: none;
     outline: none;
     font-family: var(--font-stack);
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: 400;
     line-height: 1.2;
     background: transparent;
@@ -82,43 +99,86 @@ textarea {
 
 textarea::placeholder {
     color: var(--gray-text);
-    opacity: 0.5;
+    opacity: 0.6;
 }
 
 footer {
-    padding: 24px 32px 48px 32px;
+    padding: 16px 24px 32px 24px;
+}
+
+.controls-container {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
+    max-width: 400px;
+    margin: 0 auto;
 }
 
 button {
     font-family: var(--font-stack);
     cursor: pointer;
-    transition: transform 0.1s ease, opacity 0.2s ease;
+    transition: transform 0.1s ease, background-color 0.2s ease, opacity 0.2s ease;
 }
 
 button:active {
-    transform: scale(0.97);
+    transform: scale(0.95);
 }
 
-#live-btn {
-    width: 100%;
-    max-width: 400px;
-    background-color: var(--text-color);
-    color: var(--bg-color);
+/* Boutons latéraux (Engrenage et Corbeille) */
+.icon-btn {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
     border: none;
-    border-radius: var(--radius-large);
-    padding: 20px;
-    font-size: 1.2rem;
+    background-color: var(--bg-card);
+    color: var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
+/* Bouton principal affiné avec icône d'enregistrement */
+#live-btn {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    background-color: var(--text-color);
+    color: var(--bg-card);
+    border: none;
+    border-radius: 99px; /* Bouton forme pilule */
+    padding: 16px 24px; /* Épaisseur réduite */
+    font-size: 1.1rem;
     font-weight: 600;
     letter-spacing: -0.3px;
+    box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
 }
 
+/* Cercle d'enregistrement vide */
+.record-circle {
+    width: 14px;
+    height: 14px;
+    border: 2px solid var(--bg-card);
+    border-radius: 50%;
+    display: inline-block;
+}
+
+/* État Actif : Carré d'arrêt */
 #live-btn.stop-mode {
     background-color: var(--gray-light);
     color: var(--text-color);
+    box-shadow: none;
+}
+
+#live-btn.stop-mode .record-circle {
+    border: none;
+    background-color: var(--text-color);
+    border-radius: 2px; /* Devient un carré */
+    width: 12px;
+    height: 12px;
 }
 
 #live-btn:disabled {
@@ -126,24 +186,11 @@ button:active {
     cursor: not-allowed;
 }
 
-/* Settings minimalistes */
-.settings-bar {
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-}
-
-#settings-toggle {
-    background: none;
-    border: none;
-    font-size: 1.2rem;
-    opacity: 0.3;
-}
-
+/* Settings Modal */
 #settings-modal {
     position: fixed;
     top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(242, 242, 247, 0.8);
     backdrop-filter: blur(10px);
     display: flex;
     justify-content: center;
@@ -152,10 +199,10 @@ button:active {
 }
 
 .settings-content {
-    background: var(--bg-color);
+    background: var(--bg-card);
     padding: 32px;
     border-radius: var(--radius-medium);
-    box-shadow: 0 4px 24px rgba(0,0,0,0.05);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.1);
     width: 80%;
     max-width: 320px;
     display: flex;
@@ -164,10 +211,11 @@ button:active {
 }
 
 .settings-content button {
-    padding: 12px;
-    border-radius: 8px;
+    padding: 14px;
+    border-radius: 12px;
     border: 1px solid var(--gray-light);
     background: transparent;
+    font-weight: 500;
 }
 
 @media (prefers-reduced-motion: reduce) {
