@@ -6,9 +6,17 @@ const LIVE_DURATION_MS = 8 * 60 * 60 * 1000; // 8 heures
 // Éléments du DOM
 const noteInput = document.getElementById('note-input');
 const liveBtn = document.getElementById('live-btn');
+const liveText = document.getElementById('live-text');
 const liveIndicator = document.getElementById('live-indicator');
-const settingsToggle = document.getElementById('settings-toggle');
+
+// Nouveaux boutons latéraux
+const settingsBtn = document.getElementById('settings-btn');
+const trashBtn = document.getElementById('trash-btn');
+
+// Éléments de la modale
 const settingsModal = document.getElementById('settings-modal');
+const closeSettingsBtn = document.getElementById('close-settings-btn');
+const clearDataBtn = document.getElementById('clear-data-btn');
 
 // État local de l'application
 let appState = {
@@ -20,7 +28,6 @@ let appState = {
 
 // --- INITIALISATION ---
 async function initApp() {
-    // 1. Enregistrer le Service Worker
     if ('serviceWorker' in navigator) {
         try {
             await navigator.serviceWorker.register('/sw.js');
@@ -31,23 +38,20 @@ async function initApp() {
         }
     }
 
-    // 2. Charger l'état depuis IndexedDB
     const savedState = await idbGet('appState');
     if (savedState) {
         appState = savedState;
         noteInput.value = appState.text;
     }
 
-    // 3. Vérifier si le Live est expiré (Nettoyage à l'ouverture)
     if (appState.active) {
         if (Date.now() >= appState.expiresAt) {
-            await stopLive(); // Expiré
+            await stopLive(); 
         } else {
-            updateUIForLive(true); // Toujours actif
+            updateUIForLive(true); 
         }
     }
 
-    // Sauvegarde automatique du texte en cours de frappe
     noteInput.addEventListener('input', () => {
         appState.text = noteInput.value;
         idbSet('appState', appState);
@@ -71,9 +75,8 @@ async function startLive() {
         return;
     }
 
-    liveBtn.disabled = true; // Empêcher les doubles clics
+    liveBtn.disabled = true;
 
-    // Demander permission de notification
     if (Notification.permission !== 'granted') {
         const permission = await Notification.requestPermission();
         if (permission !== 'granted') {
@@ -84,7 +87,6 @@ async function startLive() {
         }
     }
 
-    // Mise à jour de l'état
     const now = Date.now();
     appState.active = true;
     appState.startedAt = now;
@@ -92,14 +94,13 @@ async function startLive() {
     
     await idbSet('appState', appState);
 
-    // Déclencher la notification via le Service Worker
     const registration = await navigator.serviceWorker.ready;
     await registration.showNotification('Unonote', {
         body: appState.text,
         icon: '/icons/icon-192.png',
         tag: NOTIFICATION_TAG,
         renotify: true,
-        requireInteraction: true, // Aide à garder la notification persistante
+        requireInteraction: true, 
         actions: [
             { action: 'stop', title: 'Stop Live' }
         ]
@@ -118,7 +119,6 @@ async function stopLive() {
     appState.expiresAt = null;
     await idbSet('appState', appState);
 
-    // Fermer la notification
     const registration = await navigator.serviceWorker.ready;
     const notifications = await registration.getNotifications({ tag: NOTIFICATION_TAG });
     notifications.forEach(notif => notif.close());
@@ -127,29 +127,42 @@ async function stopLive() {
     liveBtn.disabled = false;
 }
 
+// --- NOUVEAU : GESTION DE LA CORBEILLE ---
+trashBtn.addEventListener('click', async () => {
+    // Si le live est actif, on l'arrête
+    if (appState.active) {
+        await stopLive();
+    }
+    
+    // On vide le texte
+    appState.text = '';
+    noteInput.value = '';
+    await idbSet('appState', appState);
+});
+
 // --- INTERFACE UTILISATEUR ---
 function updateUIForLive(isActive) {
     if (isActive) {
-        liveBtn.textContent = 'STOP LIVE';
+        liveText.textContent = 'Stop Live';
         liveBtn.classList.add('stop-mode');
         liveIndicator.classList.remove('hidden');
     } else {
-        liveBtn.textContent = 'GO LIVE';
+        liveText.textContent = 'Go Live';
         liveBtn.classList.remove('stop-mode');
         liveIndicator.classList.add('hidden');
     }
 }
 
 // --- SETTINGS (Aide & Debug) ---
-settingsToggle.addEventListener('click', () => {
+settingsBtn.addEventListener('click', () => {
     settingsModal.classList.remove('hidden');
 });
 
-document.getElementById('close-settings-btn').addEventListener('click', () => {
+closeSettingsBtn.addEventListener('click', () => {
     settingsModal.classList.add('hidden');
 });
 
-document.getElementById('clear-data-btn').addEventListener('click', async () => {
+clearDataBtn.addEventListener('click', async () => {
     await stopLive();
     appState.text = '';
     noteInput.value = '';
@@ -161,7 +174,7 @@ function updateSettingsUI() {
     document.getElementById('notif-status').textContent = `Notifications: ${Notification.permission}`;
 }
 
-// Écouteur pour mettre à jour l'UI si la notification est fermée par le SW (Action 'stop')
+// Rafraîchissements
 navigator.serviceWorker.addEventListener('message', (event) => {
     if (event.data && event.data.type === 'LIVE_STOPPED') {
         appState.active = false;
@@ -171,14 +184,12 @@ navigator.serviceWorker.addEventListener('message', (event) => {
     }
 });
 
-// Rafraîchissement automatique au retour sur l'onglet
 document.addEventListener('visibilitychange', async () => {
     if (document.visibilityState === 'visible' && appState.active) {
         const currentData = await idbGet('appState');
         if (currentData && Date.now() >= currentData.expiresAt) {
             await stopLive();
         } else if (!currentData.active) {
-             // Quelqu'un l'a arrêté via la notification
              updateUIForLive(false);
         }
     }
