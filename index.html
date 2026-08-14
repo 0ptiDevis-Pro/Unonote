@@ -10,9 +10,11 @@
 </head>
 <body>
     <header>
-        <h1>Unonote</h1>
-        <div id="live-indicator" class="hidden">
-            <span class="dot"></span> Live
+        <div class="header-card">
+            <h1>Unonote</h1>
+            <div id="live-indicator" class="hidden">
+                <span class="dot"></span> Live
+            </div>
         </div>
     </header>
 
@@ -24,7 +26,6 @@
 
     <footer>
         <div class="controls-container">
-            <!-- Bouton Paramètres (Gauche) -->
             <button id="settings-btn" class="icon-btn" aria-label="Paramètres">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <circle cx="12" cy="12" r="3"></circle>
@@ -32,13 +33,11 @@
                 </svg>
             </button>
 
-            <!-- Bouton Go Live (Centre) -->
             <button id="live-btn" aria-label="Go Live">
                 <span id="live-icon" class="record-circle"></span>
                 <span id="live-text">Go Live</span>
             </button>
 
-            <!-- Bouton Corbeille (Droite) -->
             <button id="trash-btn" class="icon-btn" aria-label="Supprimer la note">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <polyline points="3 6 5 6 21 6"></polyline>
@@ -48,7 +47,6 @@
         </div>
     </footer>
 
-    <!-- Modal Paramètres discret -->
     <div id="settings-modal" class="hidden">
         <div class="settings-content">
             <h3>Settings</h3>
@@ -59,7 +57,6 @@
         </div>
     </div>
 
-    <!-- Scripts -->
     <script src="/db.js"></script>
     <script src="/app.js"></script>
 </body>
